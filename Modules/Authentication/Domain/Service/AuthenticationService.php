@@ -9,5 +9,6 @@ class AuthenticationService
     public function generateToken()
     {
         $tokenGenerated = GenerateHash::hashAleatory();
+        dd('okok');
     }
 }

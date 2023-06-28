@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Support\Renderable;
 use Modules\Authentication\Domain\Service\AuthenticationService;
+use Modules\Authentication\Http\Requests\TokenIntegratorRequest;
 
 class AuthenticationController extends Controller
 {
@@ -20,7 +21,7 @@ class AuthenticationController extends Controller
         dd('auth');
     }
 
-    public function generateTokenAction(Request $request)
+    public function generateTokenAction(TokenIntegratorRequest $request)
     {
         try{
             $token = $this->authenticationService->generateToken();
@@ -30,7 +31,10 @@ class AuthenticationController extends Controller
                 Response::HTTP_OK
             );
         }catch(\Throwable $e){
-            throw $e;
+            dd($e);
+            return response()->json([
+                'error' => $e->getMessage()
+            ], Response::HTTP_PAYMENT_REQUIRED);
         }
     }
 }
