@@ -10,7 +10,7 @@ class TokenIntegratorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => 'required|max:50|min:2'
         ];
     }
 
@@ -20,7 +20,7 @@ class TokenIntegratorRequest extends FormRequest
         return [
             'name.required' => 'O campo nome é obrigatório.',
             'name.max' => 'O campo nome aceita no máximo 50 caracteres.',
-            'name.min' => 'O campo nome aceita no minimo 2 caractere.s',
+            'name.min' => 'O campo nome aceita no minimo 2 caracteres.',
         ];
     }
 }

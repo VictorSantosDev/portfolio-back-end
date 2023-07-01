@@ -1,9 +1,5 @@
 <?php
 
-use App\Http\Controllers\TesteController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,4 +11,3 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/test-test', [TesteController::class, 'test']);

@@ -2,19 +2,23 @@
 
 namespace Modules\Authentication\Domain\Entity;
 
-class TokenIntegrator
+use App\Data\DateTime\CreatedAt;
+use App\Data\DateTime\UpdatedAt;
+use App\Data\DateTime\DeletedAt;
+
+class TokenIntegrator implements \JsonSerializable
 {
     public function __construct(
-        private int $id,
+        private ?int $id,
         private string $name,
         private string $token,
-        private ?string $created_at,
-        private ?string $updated_at,
-        private ?string $deleted_at,
+        private ?CreatedAt $created_at,
+        private ?UpdatedAt $updated_at,
+        private ?DeletedAt $deleted_at,
     ) {
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -29,18 +33,29 @@ class TokenIntegrator
         return $this->token;
     }
     
-    public function getCreatedAt(): ?string
+    public function getCreatedAt(): ?CreatedAt
     {
         return $this->created_at;
     }
     
-    public function getUpdatedAt(): ?string
+    public function getUpdatedAt(): ?UpdatedAt
     {
         return $this->updated_at;
     }
     
-    public function getDeletedAt(): ?string
+    public function getDeletedAt(): ?DeletedAt
     {
         return $this->deleted_at;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'token' => $this->getToken(),
+            'createdAt' => $this->getCreatedAt()?->jsonSerialize(),
+            'updatedAt' => $this->getUpdatedAt()?->jsonSerialize()
+        ];
     }
 }

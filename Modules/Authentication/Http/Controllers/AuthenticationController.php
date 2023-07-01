@@ -4,34 +4,52 @@ namespace Modules\Authentication\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Support\Renderable;
+use Modules\Authentication\Http\Requests\AuthIntegratorRequest;
 use Modules\Authentication\Domain\Service\AuthenticationService;
 use Modules\Authentication\Http\Requests\TokenIntegratorRequest;
 
 class AuthenticationController extends Controller
 {
-    public function __construct(
-        private AuthenticationService $authenticationService
-    ) {
-    }
+    private AuthenticationService $authenticationService;
 
-    public function authIntegratorAction(Request $request)
+    public function __construct()
     {
-        dd('auth');
+        $this->authenticationService = resolve(AuthenticationService::class);
     }
 
-    public function generateTokenAction(TokenIntegratorRequest $request)
+    public function authIntegratorAction(AuthIntegratorRequest $request): JsonResponse
     {
         try{
-            $token = $this->authenticationService->generateToken();
+            $output = $this->authenticationService->auth(
+                $request->validated()
+            );
 
             return response()->json(
-                ['token' => $token],
+                ['authentication' => $output],
                 Response::HTTP_OK
             );
         }catch(\Throwable $e){
-            dd($e);
+            return response()->json([
+                'error' => $e->getMessage()
+            ], Response::HTTP_PAYMENT_REQUIRED);
+        }
+    }
+
+    public function generateTokenAction(TokenIntegratorRequest $request): JsonResponse
+    {
+        try{
+            $output = $this->authenticationService->generateToken(
+                $request->validated()
+            );
+
+            return response()->json(
+                ['tokenIntegrator' => $output->jsonSerialize()],
+                Response::HTTP_OK
+            );
+        }catch(\Throwable $e){
             return response()->json([
                 'error' => $e->getMessage()
             ], Response::HTTP_PAYMENT_REQUIRED);

@@ -4,7 +4,7 @@ namespace Modules\Authentication\Domain\Infrastructure\Entity;
 
 use Modules\Authentication\Domain\Entity\TokenIntegrator;
 
-interface TokenIntegratorEntity
+interface InterfaceTokenIntegratorEntity
 {
     public function save(TokenIntegrator $tokenIntegrator): TokenIntegrator;
 }
