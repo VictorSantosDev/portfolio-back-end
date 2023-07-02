@@ -2,7 +2,9 @@
 
 namespace Modules\Authentication\Domain\Infrastructure\Repository;
 
+use Illuminate\Support\Collection;
+
 interface InterfaceSecretAuthorizationRepository
 {
-    public function authentication(string $value);
+    public function getAll(): Collection;
 }

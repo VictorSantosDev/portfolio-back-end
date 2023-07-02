@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name', 50);
             $table->string('token', 70);
+            $table->boolean('active')->default(1);
             $table->timestamps();
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);
         });

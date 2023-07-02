@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('secret_authorization', function (Blueprint $table) {
             $table->id();
-            $table->string('secret', 70);
+            $table->string('secret', 255);
             $table->boolean('active')->default(1);
             $table->timestamps();
         });
