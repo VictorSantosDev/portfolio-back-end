@@ -5,6 +5,7 @@ namespace Modules\Authentication\Domain\Service;
 use Exception;
 use App\Data\DateTime\CreatedAt;
 use App\Data\DateTime\UpdatedAt;
+use Illuminate\Support\Facades\Cache;
 use Modules\Authentication\Domain\Utils\GenerateHash;
 use Modules\Authentication\Domain\Entity\TokenIntegrator;
 use Modules\Authentication\Infrastructure\Entity\TokenIntegratorEntity;
@@ -33,15 +34,21 @@ class AuthenticationService
     }
 
     /** @param array<mixed> */
-    public function auth(array $data): bool
+    public function auth(array $data): string
     {
         $token = $data['token'];
         $secret = $data['secret'];
 
         $this->verifyTokenIntegrator($token);
-        $this->verifySecretAuthorization($secret);
+        $security = $this->verifySecretAuthorization($secret);
 
-        return true;
+        Cache::set(
+            'authentication',
+            $reponseToken = GenerateHash::hashAleatory($security),
+            600
+        );
+
+        return $reponseToken;
     }
 
     public function verifyTokenIntegrator(string $token): bool
@@ -54,14 +61,14 @@ class AuthenticationService
         return true;
     }
 
-    public function verifySecretAuthorization(string $secret): bool
+    public function verifySecretAuthorization(string $secret): string
     {
         $security = md5($secret) . env('KEY_AUTHORIZATION');
         $collection = $this->secretAuthorizationRepository->getAll();
         
         foreach ($collection->all() as $secrets) {
             if (password_verify($security, $secrets->getSecret())) {
-                return true;
+                return md5((new CreatedAt)->toDataBase());
             }
         }
 

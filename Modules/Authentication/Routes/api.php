@@ -18,5 +18,5 @@ use Modules\Authentication\Http\Controllers\AuthenticationController;
 Route::post('/authentication', [AuthenticationController::class, 'authIntegratorAction'])
     ->name('auth-integrator');
 
-Route::post('/generate-token', [AuthenticationController::class, 'generateTokenAction'])
+Route::middleware('checkAuth')->post('/generate-token', [AuthenticationController::class, 'generateTokenAction'])
     ->name('generate-token');
