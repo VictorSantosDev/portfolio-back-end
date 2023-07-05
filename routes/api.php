@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\SendMailPortfolioController;
+use Illuminate\Support\Facades\Route;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -11,3 +15,5 @@
 |
 */
 
+Route::post('/send-email-portfolio', [SendMailPortfolioController::class, 'sendAction'])
+    ->name('send-email-portfolio');
